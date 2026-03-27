@@ -370,7 +370,7 @@ h1 em { font-style: italic; color: var(--gold); }
               stroke="#9e8e7e" stroke-width="1.1" stroke-linejoin="round"/>
             <path d="M3.5 6.5l1.5 1.5L8 5" stroke="#9e8e7e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          256-bit SSL · Apple Pay requires domain verification — see Paystack dashboard
+          256-bit SSL · Secure Apple Pay Payments by Paystack 
         </div>
       </div>
 
@@ -420,8 +420,7 @@ h1 em { font-style: italic; color: var(--gold); }
 </div>
 
 <script>
-// PLACEHOLDER: Paystack key will be injected by GitHub Actions
-const PK = 'YOUR_PAYSTACK_PUBLIC_KEY_HERE';
+const PK = 'pk_live_e2c50004cfee23abb83f9';
 
 const SYM  = { USD:'$', EUR:'€', GBP:'£' };
 const VALS = { USD:[5,20,50,100,250,500], EUR:[5,20,50,100,250,500], GBP:[5,15,50,100,200,500] };
@@ -464,7 +463,10 @@ function customAmt(inp) {
   amt = parseFloat(inp.value) || 0;
 }
 
-function pay() {
+// Initialize PaystackPop instance for pre-checkout modal
+const paystackPop = new PaystackPop();
+
+async function pay() {
   const email = document.getElementById('dEmail').value.trim();
   const name  = document.getElementById('dName').value.trim();
   const cur   = document.getElementById('currency').value;
@@ -479,35 +481,54 @@ function pay() {
 
   const ref = 'DON-' + Date.now() + '-' + Math.random().toString(36).slice(2,7).toUpperCase();
 
-  PaystackPop.setup({
-    key: PK,
-    email, currency: cur,
-    amount: Math.round(amt * 100),
-    ref,
-    firstname: name.split(' ')[0] || '',
-    lastname:  name.split(' ').slice(1).join(' ') || '',
-    label: 'Donation',
-    channels: ['apple_pay'],   // ← Apple Pay only
-    metadata: {
-      custom_fields: [
-        { display_name:'Donor', variable_name:'donor', value: name },
-        { display_name:'Amount', variable_name:'amount', value: `${cur} ${amt}` }
-      ]
-    },
-    onClose() {
-      btn.disabled = false;
-      btn.innerHTML = ' Pay with Apple Pay';
-    },
-    callback(r) {
-      btn.disabled = false;
-      btn.innerHTML = ' Pay with Apple Pay';
-      document.getElementById('txRef').textContent = r.reference || ref;
-      document.getElementById('fiatForm').style.display = 'none';
-      const ok = document.getElementById('fiatOk');
-      ok.style.display = 'block';
-      ok.classList.add('on');
-    }
-  }).openIframe();
+  try {
+    // Use pre-checkout modal - automatically shows Apple Pay on iOS/Safari
+    await paystackPop.checkout({
+      key: PK,
+      email: email,
+      amount: Math.round(amt * 100), // Convert to lowest currency unit
+      currency: cur,
+      ref: ref,
+      firstname: name.split(' ')[0] || '',
+      lastname:  name.split(' ').slice(1).join(' ') || '',
+      label: 'Donation',
+      metadata: {
+        custom_fields: [
+          { display_name:'Donor', variable_name:'donor', value: name },
+          { display_name:'Amount', variable_name:'amount', value: `${cur} ${amt}` }
+        ]
+      },
+      onSuccess: function(transaction) {
+        // Handle successful payment
+        btn.disabled = false;
+        btn.innerHTML = ' Pay with Apple Pay';
+        document.getElementById('txRef').textContent = transaction.reference || ref;
+        document.getElementById('fiatForm').style.display = 'none';
+        const ok = document.getElementById('fiatOk');
+        ok.style.display = 'block';
+        ok.classList.add('on');
+        console.log("Transaction successful: ", transaction);
+      },
+      onCancel: function() {
+        // Handle user closing the modal
+        btn.disabled = false;
+        btn.innerHTML = ' Pay with Apple Pay';
+        console.log("Payment modal closed");
+      },
+      onError: function(error) {
+        // Handle error
+        btn.disabled = false;
+        btn.innerHTML = ' Pay with Apple Pay';
+        alert('Payment failed. Please try again.');
+        console.log("Payment error: ", error);
+      }
+    });
+  } catch (error) {
+    btn.disabled = false;
+    btn.innerHTML = ' Pay with Apple Pay';
+    console.error("Checkout error: ", error);
+    alert('Unable to initialize payment. Please try again.');
+  }
 }
 
 function resetFiat() {
@@ -522,6 +543,3 @@ function resetFiat() {
 </script>
 </body>
 </html>
-
-    
-    
