@@ -3,543 +3,410 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Give Generously — Donate</title>
+<title>Donate Crypto — Give Generously</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://js.paystack.co/v2/inline.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --cream: #faf6f0;
-  --warm-white: #fffdf9;
-  --gold: #c9974a;
-  --gold-light: #e8c47a;
-  --dark: #1a1410;
-  --mid: #5a4a3a;
-  --soft: #9e8e7e;
-  --border: rgba(201,151,74,0.25);
+  --navy:    #0d1b2a;
+  --navy2:   #162035;
+  --navy3:   #1e2d45;
+  --orange:  #f97316;
+  --orange2: #fb923c;
+  --teal:    #06b6d4;
+  --white:   #ffffff;
+  --off:     #f0f4f8;
+  --muted:   #64748b;
+  --border:  rgba(255,255,255,.09);
+  --card-bg: #192438;
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--cream);
-  color: var(--dark);
+  font-family: 'Manrope', sans-serif;
+  background: var(--navy);
+  color: var(--white);
   min-height: 100vh;
   overflow-x: hidden;
 }
+
+/* ── Noise overlay ── */
 body::before {
   content: '';
-  position: fixed; inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(201,151,74,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 85%, rgba(201,151,74,0.05) 0%, transparent 55%);
-  pointer-events: none; z-index: 0;
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
 }
 
-.wrapper {
+/* ── Background glow blobs ── */
+.blob {
+  position: fixed; z-index: 0; pointer-events: none;
+  border-radius: 50%; filter: blur(80px); opacity: .18;
+}
+.blob-1 { width: 480px; height: 480px; top: -120px; left: -100px; background: var(--orange); }
+.blob-2 { width: 360px; height: 360px; bottom: -60px; right: -80px; background: var(--teal); }
+
+/* ── Layout ── */
+.page {
   position: relative; z-index: 1;
-  max-width: 500px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+/* ── Nav ── */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 40px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  background: rgba(13,27,42,.6);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700;
+  letter-spacing: -.01em; color: var(--white);
+  text-decoration: none;
+}
+.logo-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--orange), #ef4444);
+  display: flex; align-items: center; justify-content: center;
+  font-size: .95rem;
+}
+.nav-pill {
+  padding: 8px 18px; border-radius: 99px;
+  background: rgba(249,115,22,.15);
+  border: 1px solid rgba(249,115,22,.35);
+  font-size: .75rem; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--orange);
+}
+
+/* ── Hero split ── */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 60px;
+  align-items: center;
+  padding: 70px 40px 80px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 50px 20px 80px;
+  width: 100%;
 }
 
-/* Header */
-.header { text-align: center; margin-bottom: 38px; animation: fadeUp .6s ease both; }
-.ornament { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 22px; }
-.ornament-line { height: 1px; width: 54px; background: linear-gradient(90deg, transparent, var(--gold)); }
-.ornament-line:last-child { background: linear-gradient(90deg, var(--gold), transparent); }
-.ornament-icon {
-  width: 34px; height: 34px; border: 1.5px solid var(--gold); border-radius: 50%;
+/* Left hero copy */
+.hero-copy { animation: fadeUp .7s ease both; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 14px; border-radius: 99px;
+  background: rgba(249,115,22,.12);
+  border: 1px solid rgba(249,115,22,.28);
+  font-size: .72rem; font-weight: 600; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--orange);
+  margin-bottom: 24px;
+}
+.badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); animation: pulse 2s ease infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.5)} }
+
+.hero-copy h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.6rem, 6vw, 3.8rem);
+  font-weight: 800; line-height: 1.0; letter-spacing: -.03em;
+  color: var(--white);
+  margin-bottom: 20px;
+}
+.hero-copy h1 span { color: var(--orange); }
+
+.hero-copy p {
+  font-size: .95rem; font-weight: 400; line-height: 1.7;
+  color: rgba(255,255,255,.55);
+  max-width: 400px; margin-bottom: 36px;
+}
+
+/* Stats row */
+.stats {
+  display: flex; gap: 32px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.stat-item {}
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem; font-weight: 700; color: var(--white);
+}
+.stat-num span { color: var(--orange); }
+.stat-label { font-size: .72rem; font-weight: 500; color: rgba(255,255,255,.4); letter-spacing: .05em; text-transform: uppercase; margin-top: 2px; }
+
+/* Coins marquee */
+.coin-strip {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 32px;
+}
+.coin-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 13px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 99px;
+  font-size: .76rem; font-weight: 600; color: rgba(255,255,255,.7);
+  letter-spacing: .03em;
+}
+.coin-chip .icon { font-size: .9rem; }
+
+/* ── Donate card ── */
+.donate-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 40px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(249,115,22,.06);
+  animation: fadeUp .7s .1s ease both;
+}
+.card-header {
+  background: linear-gradient(135deg, rgba(249,115,22,.18), rgba(249,115,22,.06));
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  padding: 20px 26px;
+  display: flex; align-items: center; gap: 12px;
+}
+.card-header-icon {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--orange), #ef4444);
   display: flex; align-items: center; justify-content: center;
-  color: var(--gold); font-size: 14px;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
-h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(2.1rem, 8vw, 2.9rem);
-  font-weight: 300; line-height: 1.1; color: var(--dark);
+.card-header-text {}
+.card-header-title {
+  font-family: 'Syne', sans-serif;
+  font-size: .95rem; font-weight: 700; color: var(--white);
 }
-h1 em { font-style: italic; color: var(--gold); }
-.subtitle {
-  margin: 12px auto 0; font-size: .86rem; font-weight: 300;
-  color: var(--soft); line-height: 1.65; max-width: 310px;
-}
-
-/* Toggle */
-.method-toggle {
-  display: grid; grid-template-columns: 1fr 1fr;
-  background: var(--warm-white);
-  border: 1px solid var(--border);
-  border-radius: 13px; padding: 5px; gap: 4px;
-  margin-bottom: 18px;
-  box-shadow: 0 4px 20px rgba(90,74,58,.06);
-  animation: fadeUp .6s .1s ease both;
-}
-.toggle-btn {
-  padding: 13px 8px; border: none; border-radius: 9px;
-  background: transparent;
-  font-family: 'DM Sans', sans-serif;
-  font-size: .82rem; font-weight: 500; letter-spacing: .04em;
-  color: var(--soft); cursor: pointer; transition: all .25s;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-}
-.toggle-btn span { font-size: 1rem; }
-.toggle-btn.fiat-on {
-  background: linear-gradient(135deg, var(--gold), #b8832e);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(201,151,74,.32);
-}
-.toggle-btn.crypto-on {
-  background: linear-gradient(135deg, #f7931a, #d97b0a);
-  color: #fff;
-  box-shadow: 0 4px 14px rgba(247,147,26,.35);
+.card-header-sub {
+  font-size: .72rem; color: rgba(255,255,255,.45); margin-top: 1px;
 }
 
-/* Card */
-.card {
-  background: var(--warm-white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 30px 26px;
-  box-shadow: 0 20px 60px rgba(90,74,58,.07), 0 4px 16px rgba(90,74,58,.04);
-  animation: fadeUp .6s .15s ease both;
-}
-.panel { display: none; }
-.panel.on { display: block; }
+.card-body { padding: 22px 26px 26px; }
 
-/* Labels */
-.lbl {
-  font-size: .69rem; font-weight: 500;
-  letter-spacing: .12em; text-transform: uppercase;
-  color: var(--soft); margin-bottom: 10px;
+.support-label {
+  font-size: .67rem; font-weight: 600; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.35);
+  margin-bottom: 10px;
+}
+.coin-mini-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.coin-mini {
+  padding: 4px 10px; border-radius: 6px;
+  background: rgba(249,115,22,.1);
+  border: 1px solid rgba(249,115,22,.2);
+  font-size: .68rem; font-weight: 600; color: rgba(249,115,22,.85);
+  letter-spacing: .04em;
 }
 
-/* Apple pay badge */
-.ap-badge {
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 10px 14px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--cream); margin-bottom: 20px;
-  font-size: .8rem; color: var(--soft);
-}
-.ap-badge strong { color: var(--dark); font-weight: 500; }
-.ap-badge .apple { font-size: 1.1rem; }
-
-/* Currency select */
-.sel-wrap { position: relative; margin-bottom: 18px; }
-.sel-wrap select {
-  width: 100%; padding: 12px 36px 12px 14px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--cream);
-  font-family: 'DM Sans', sans-serif; font-size: .88rem; color: var(--dark);
-  outline: none; cursor: pointer; transition: border-color .2s;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239e8e7e' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center;
-}
-.sel-wrap select:focus { border-color: var(--gold); }
-
-/* Presets */
-.presets { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin-bottom: 12px; }
-.preset-btn {
-  padding: 10px 6px; border: 1.5px solid var(--border); border-radius: 9px;
-  background: transparent;
-  font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; color: var(--mid);
-  cursor: pointer; transition: all .2s;
-}
-.preset-btn.active {
-  border-color: var(--gold); color: var(--gold);
-  background: rgba(201,151,74,.06);
-  box-shadow: 0 0 0 3px rgba(201,151,74,.1);
-}
-.preset-btn:hover:not(.active) { border-color: rgba(201,151,74,.45); color: var(--dark); }
-
-/* Amount input */
-.input-wrap { position: relative; margin-bottom: 18px; }
-.cur-sym {
-  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-  font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
-  color: var(--soft); pointer-events: none;
-}
-.amt-input {
-  width: 100%; padding: 13px 14px 13px 34px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--cream);
-  font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: var(--dark);
-  outline: none; transition: border-color .2s, box-shadow .2s; -webkit-appearance: none;
-}
-.amt-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,151,74,.12); }
-.amt-input::placeholder { color: var(--soft); opacity: .5; }
-
-/* Divider */
-.divider { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
-.divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.divider span { font-size: .69rem; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
-
-/* Fields */
-.field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 11px; }
-.field label { font-size: .69rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--soft); }
-.field input {
-  padding: 11px 13px; border: 1.5px solid var(--border); border-radius: 10px;
-  background: var(--cream); font-family: 'DM Sans', sans-serif;
-  font-size: .88rem; color: var(--dark); outline: none;
-  transition: border-color .2s, box-shadow .2s; -webkit-appearance: none;
-}
-.field input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,151,74,.12); }
-.field input::placeholder { color: var(--soft); opacity: .5; }
-
-/* Pay button */
-.pay-btn {
-  width: 100%; padding: 15px;
-  background: linear-gradient(135deg, var(--gold), #b8832e);
-  border: none; border-radius: 12px;
-  color: #fff; font-family: 'DM Sans', sans-serif;
-  font-size: .87rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
-  cursor: pointer; transition: all .25s;
-  box-shadow: 0 4px 20px rgba(201,151,74,.35), 0 1px 0 rgba(255,255,255,.2) inset;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-top: 20px;
-}
-.pay-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(201,151,74,.45); }
-.pay-btn:active { transform: translateY(0); }
-.pay-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
-
-/* Secure note */
-.secure-note {
-  text-align: center; margin-top: 13px;
-  font-size: .69rem; color: var(--soft);
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-}
-
-/* Crypto panel */
-.crypto-note {
-  background: linear-gradient(135deg, rgba(247,147,26,.08), rgba(247,147,26,.03));
-  border: 1px solid rgba(247,147,26,.2);
-  border-radius: 10px; padding: 12px 15px;
-  font-size: .78rem; color: var(--mid); line-height: 1.55;
-  margin-bottom: 18px;
-  display: flex; gap: 10px; align-items: flex-start;
-}
-.crypto-note .ci { font-size: 1.2rem; flex-shrink: 0; }
-.coin-row {
-  display: flex; gap: 6px; flex-wrap: wrap;
-  margin-bottom: 18px; justify-content: center;
-}
-.coin-pill {
-  padding: 4px 11px; border: 1px solid rgba(247,147,26,.3);
-  border-radius: 20px; font-size: .71rem; font-weight: 500;
-  color: var(--mid); letter-spacing: .05em;
-}
-.np-wrap {
+.widget-wrap {
   display: flex; justify-content: center;
-  overflow: hidden; border-radius: 12px;
+  border-radius: 12px; overflow: hidden;
+  background: rgba(0,0,0,.25);
 }
-.np-wrap iframe { border-radius: 12px; max-width: 100%; }
+.widget-wrap iframe { border-radius: 12px; max-width: 100%; display: block; }
 
-/* Success */
-.success-screen { display: none; text-align: center; padding: 36px 16px; }
-.success-screen.on { display: block; animation: fadeUp .5s ease both; }
-.s-circle {
-  width: 66px; height: 66px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 18px; font-size: 1.8rem;
-  box-shadow: 0 8px 24px rgba(201,151,74,.3);
+.trust-row {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,.06);
 }
-.success-screen h2 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.85rem; font-weight: 300; margin-bottom: 8px;
+.trust-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .67rem; font-weight: 500; color: rgba(255,255,255,.3);
+  letter-spacing: .04em;
 }
-.success-screen p { font-size: .85rem; color: var(--soft); line-height: 1.6; }
-.s-ref {
-  margin-top: 16px; padding: 10px 16px;
-  background: var(--cream); border: 1px solid var(--border); border-radius: 10px;
-  font-size: .77rem; color: var(--mid); word-break: break-all;
-}
-.s-ref strong { color: var(--gold); }
-.reset-btn {
-  margin-top: 16px; padding: 10px 22px;
-  border: 1.5px solid var(--border); border-radius: 10px;
-  background: transparent; font-family: 'DM Sans', sans-serif;
-  font-size: .82rem; color: var(--mid); cursor: pointer; transition: all .2s;
-}
-.reset-btn:hover { border-color: var(--gold); color: var(--gold); }
+.trust-item svg { opacity: .5; }
 
-/* Footer */
-.footer {
-  text-align: center; margin-top: 34px;
-  font-size: .69rem; color: var(--soft); opacity: .7;
-  animation: fadeUp .6s .3s ease both;
+/* ── Footer ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 22px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
 }
-.footer a { color: var(--gold); text-decoration: none; }
-
-/* Animations */
-@keyframes fadeUp { from { opacity:0; transform:translateY(16px) } to { opacity:1; transform:translateY(0) } }
-.spinner {
-  display: inline-block; width: 14px; height: 14px;
-  border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
-  border-radius: 50%; animation: spin .7s linear infinite;
+.footer-left {
+  font-size: .74rem; color: rgba(255,255,255,.3);
 }
-@keyframes spin { to { transform: rotate(360deg) } }
+.footer-right {
+  display: flex; gap: 20px; align-items: center;
+}
+.footer-right a {
+  font-size: .74rem; color: rgba(255,255,255,.3);
+  text-decoration: none; transition: color .2s;
+}
+.footer-right a:hover { color: var(--orange); }
+.powered-by {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 12px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 99px;
+  font-size: .68rem; font-weight: 600; color: rgba(255,255,255,.35);
+  letter-spacing: .04em; text-transform: uppercase;
+}
 
-@media (max-width: 420px) {
-  .card { padding: 22px 15px; }
-  .wrapper { padding: 36px 14px 60px; }
+/* ── Animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  nav { padding: 18px 20px; }
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 40px 20px 50px;
+    gap: 40px;
+  }
+  .donate-card { max-width: 420px; margin: 0 auto; width: 100%; }
+  .stats { gap: 20px; }
+  footer { padding: 18px 20px; flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 440px) {
+  .hero-copy h1 { font-size: 2.2rem; }
+  .card-body { padding: 16px 14px 18px; }
+  .card-header { padding: 16px 14px; }
+  .widget-wrap iframe { width: 100% !important; }
 }
 </style>
 </head>
 <body>
 
-<div class="wrapper">
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
 
-  <div class="header">
-    <div class="ornament">
-      <div class="ornament-line"></div>
-      <div class="ornament-icon">♥</div>
-      <div class="ornament-line"></div>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <div class="logo-icon">♥</div>
+      Give Generously
+    </a>
+    <div class="nav-pill">🔒 Secure Giving</div>
+  </nav>
+
+  <!-- HERO -->
+  <main>
+    <div class="hero">
+
+      <!-- Left: copy -->
+      <div class="hero-copy">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Crypto Donations · 100+ Coins Accepted
+        </div>
+
+        <h1>Donate Crypto,<br><span>Make an Impact</span></h1>
+
+        <p>Support our mission with any cryptocurrency. Fast, borderless, and secure payments processed via NOWPayments. No account required.</p>
+
+        <div class="coin-strip">
+          <div class="coin-chip"><span class="icon">₿</span> Bitcoin</div>
+          <div class="coin-chip"><span class="icon">Ξ</span> Ethereum</div>
+          <div class="coin-chip"><span class="icon">◎</span> Solana</div>
+          <div class="coin-chip"><span class="icon">₮</span> USDT</div>
+          <div class="coin-chip"><span class="icon">⬡</span> BNB</div>
+          <div class="coin-chip"><span class="icon">✦</span> XRP</div>
+          <div class="coin-chip"><span class="icon">+</span> 100 more</div>
+        </div>
+
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-num">100<span>+</span></div>
+            <div class="stat-label">Coins Accepted</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">0<span>%</span></div>
+            <div class="stat-label">Hidden Fees</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">24<span>/7</span></div>
+            <div class="stat-label">Always Open</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: donate widget card -->
+      <div class="donate-card">
+        <div class="card-header">
+          <div class="card-header-icon">₿</div>
+          <div class="card-header-text">
+            <div class="card-header-title">Donate Cryptocurrency</div>
+            <div class="card-header-sub">Powered by NOWPayments · Instant conversion</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="support-label">Accepted currencies</div>
+          <div class="coin-mini-row">
+            <span class="coin-mini">BTC</span>
+            <span class="coin-mini">ETH</span>
+            <span class="coin-mini">SOL</span>
+            <span class="coin-mini">USDT</span>
+            <span class="coin-mini">BNB</span>
+            <span class="coin-mini">XRP</span>
+            <span class="coin-mini">LTC</span>
+            <span class="coin-mini">+ more</span>
+          </div>
+
+          <div class="widget-wrap">
+            <iframe
+              src="https://nowpayments.io/embeds/donation-widget?api_key=cd31cdfc-be6a-4280-a677-e33b0ad24f10"
+              width="346" height="623"
+              frameborder="0" scrolling="no"
+              style="overflow-y:hidden; max-width:100%;">
+              Can't load widget
+            </iframe>
+          </div>
+
+          <div class="trust-row">
+            <div class="trust-item">
+              <svg width="11" height="13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5.5 1L1 3.2v3.8C1 9.8 3.1 12 5.5 12S10 9.8 10 7V3.2L5.5 1z"
+                  stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M3.5 6.5l1.5 1.5L8 5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              256-bit SSL
+            </div>
+            <div class="trust-item">
+              <svg width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/>
+                <path d="M4 6l1.5 1.5L8 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Non-custodial
+            </div>
+            <div class="trust-item">
+              <svg width="12" height="12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 1v2M6 9v2M1 6h2M9 6h2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+                <circle cx="6" cy="6" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+              </svg>
+              Instant Processing
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
-    <h1>Give<br><em>Generously</em></h1>
-    <p class="subtitle">Support our mission with Apple Pay or cryptocurrency. Every contribution matters.</p>
-  </div>
+  </main>
 
-  <div class="method-toggle">
-    <button class="toggle-btn fiat-on" id="fiatBtn" onclick="switchTo('fiat')">
-      <span></span> Apple Pay
-    </button>
-    <button class="toggle-btn" id="cryptoBtn" onclick="switchTo('crypto')">
-      <span>₿</span> Crypto
-    </button>
-  </div>
-
-  <div class="card">
-
-    <!-- ══ APPLE PAY PANEL ══ -->
-    <div class="panel on" id="fiatPanel">
-
-      <div id="fiatForm">
-        <div class="ap-badge">
-          <span class="apple"></span>
-          <span><strong>Apple Pay</strong> — Safari &amp; iOS only · Powered by Paystack</span>
-        </div>
-
-        <div class="lbl">Currency</div>
-        <div class="sel-wrap">
-          <select id="currency" onchange="updateCurrency()">
-            <option value="USD">🇺🇸 USD — US Dollar</option>
-            <option value="EUR">🇪🇺 EUR — Euro</option>
-            <option value="GBP">🇬🇧 GBP — British Pound</option>
-          </select>
-        </div>
-
-        <div class="lbl">Donation amount</div>
-        <div class="presets" id="presets">
-          <button class="preset-btn" data-v="5"   onclick="pick(this)">$5</button>
-          <button class="preset-btn active" data-v="20" onclick="pick(this)">$20</button>
-          <button class="preset-btn" data-v="50"  onclick="pick(this)">$50</button>
-          <button class="preset-btn" data-v="100" onclick="pick(this)">$100</button>
-          <button class="preset-btn" data-v="250" onclick="pick(this)">$250</button>
-          <button class="preset-btn" data-v="500" onclick="pick(this)">$500</button>
-        </div>
-
-        <div class="input-wrap">
-          <span class="cur-sym" id="sym">$</span>
-          <input type="number" class="amt-input" id="custom"
-            placeholder="Or enter custom amount" min="1"
-            oninput="customAmt(this)">
-        </div>
-
-        <div class="divider"><span>Your details</span></div>
-
-        <div class="field">
-          <label>Full name</label>
-          <input type="text" id="dName" placeholder="Jane Doe" autocomplete="name">
-        </div>
-        <div class="field">
-          <label>Email address</label>
-          <input type="email" id="dEmail" placeholder="jane@example.com" autocomplete="email">
-        </div>
-
-        <button class="pay-btn" id="payBtn" onclick="pay()">
-           Pay with Apple Pay
-        </button>
-
-        <div class="secure-note">
-          <svg width="11" height="13" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M5.5 1L1 3.2v3.8C1 9.8 3.1 12 5.5 12S10 9.8 10 7V3.2L5.5 1z"
-              stroke="#9e8e7e" stroke-width="1.1" stroke-linejoin="round"/>
-            <path d="M3.5 6.5l1.5 1.5L8 5" stroke="#9e8e7e" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-          256-bit SSL · Secure Apple Pay Payments by Paystack 
-        </div>
-      </div>
-
-      <div class="success-screen" id="fiatOk">
-        <div class="s-circle">✓</div>
-        <h2>Thank You!</h2>
-        <p>Your donation has been received.<br>A receipt will arrive at your email shortly.</p>
-        <div class="s-ref">Reference: <strong id="txRef">—</strong></div>
-        <button class="reset-btn" onclick="resetFiat()">Donate again</button>
-      </div>
-
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-left">© 2025 Give Generously. All rights reserved.</div>
+    <div class="footer-right">
+      <a href="https://nowpayments.io" target="_blank" rel="noopener">
+        <span class="powered-by">⚡ Powered by NOWPayments</span>
+      </a>
     </div>
-
-    <!-- ══ CRYPTO PANEL ══ -->
-    <div class="panel" id="cryptoPanel">
-      <div class="crypto-note">
-        <span class="ci">₿</span>
-        <div>Donate in any cryptocurrency — payments processed securely via NOWPayments. Supports 100+ coins. Any fiat equivalent is accepted.</div>
-      </div>
-      <div class="coin-row">
-        <span class="coin-pill">₿ BTC</span>
-        <span class="coin-pill">Ξ ETH</span>
-        <span class="coin-pill">◎ SOL</span>
-        <span class="coin-pill">₮ USDT</span>
-        <span class="coin-pill">⬡ BNB</span>
-        <span class="coin-pill">+ 100 more</span>
-      </div>
-      <div class="np-wrap">
-        <iframe
-          src="https://nowpayments.io/embeds/donation-widget?api_key=cd31cdfc-be6a-4280-a677-e33b0ad24f10"
-          width="346" height="623"
-          frameborder="0" scrolling="no"
-          style="overflow-y:hidden;">
-          Can't load widget
-        </iframe>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="footer">
-    Fiat: <a href="https://paystack.com" target="_blank" rel="noopener">Paystack</a> (Apple Pay · domain verification required)
-    &nbsp;·&nbsp;
-    Crypto: <a href="https://nowpayments.io" target="_blank" rel="noopener">NOWPayments</a>
-  </div>
+  </footer>
 
 </div>
 
-<script>
-const PK = 'pk_live_e2c50004cfee23abb83f9';
-
-const SYM  = { USD:'$', EUR:'€', GBP:'£' };
-const VALS = { USD:[5,20,50,100,250,500], EUR:[5,20,50,100,250,500], GBP:[5,15,50,100,200,500] };
-
-let amt = 20;
-
-function switchTo(p) {
-  const isFiat = p === 'fiat';
-  document.getElementById('fiatPanel').classList.toggle('on', isFiat);
-  document.getElementById('cryptoPanel').classList.toggle('on', !isFiat);
-  const fb = document.getElementById('fiatBtn');
-  const cb = document.getElementById('cryptoBtn');
-  fb.className = 'toggle-btn' + (isFiat ? ' fiat-on' : '');
-  cb.className = 'toggle-btn' + (!isFiat ? ' crypto-on' : '');
-}
-
-function updateCurrency() {
-  const cur = document.getElementById('currency').value;
-  document.getElementById('sym').textContent = SYM[cur];
-  const vs = VALS[cur];
-  document.querySelectorAll('.preset-btn').forEach((b, i) => {
-    b.dataset.v = vs[i];
-    b.textContent = SYM[cur] + vs[i].toLocaleString();
-    b.classList.remove('active');
-  });
-  document.querySelectorAll('.preset-btn')[1].classList.add('active');
-  amt = vs[1];
-  document.getElementById('custom').value = '';
-}
-
-function pick(btn) {
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  amt = parseFloat(btn.dataset.v);
-  document.getElementById('custom').value = '';
-}
-
-function customAmt(inp) {
-  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
-  amt = parseFloat(inp.value) || 0;
-}
-
-// Initialize PaystackPop instance for pre-checkout modal
-const paystackPop = new PaystackPop();
-
-async function pay() {
-  const email = document.getElementById('dEmail').value.trim();
-  const name  = document.getElementById('dName').value.trim();
-  const cur   = document.getElementById('currency').value;
-
-  if (!name)  { alert('Please enter your name.'); return; }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Please enter a valid email.'); return; }
-  if (amt < 1) { alert('Please select or enter an amount.'); return; }
-
-  const btn = document.getElementById('payBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Opening…';
-
-  const ref = 'DON-' + Date.now() + '-' + Math.random().toString(36).slice(2,7).toUpperCase();
-
-  try {
-    // Use pre-checkout modal - automatically shows Apple Pay on iOS/Safari
-    await paystackPop.checkout({
-      key: PK,
-      email: email,
-      amount: Math.round(amt * 100), // Convert to lowest currency unit
-      currency: cur,
-      ref: ref,
-      firstname: name.split(' ')[0] || '',
-      lastname:  name.split(' ').slice(1).join(' ') || '',
-      label: 'Donation',
-      metadata: {
-        custom_fields: [
-          { display_name:'Donor', variable_name:'donor', value: name },
-          { display_name:'Amount', variable_name:'amount', value: `${cur} ${amt}` }
-        ]
-      },
-      onSuccess: function(transaction) {
-        // Handle successful payment
-        btn.disabled = false;
-        btn.innerHTML = ' Pay with Apple Pay';
-        document.getElementById('txRef').textContent = transaction.reference || ref;
-        document.getElementById('fiatForm').style.display = 'none';
-        const ok = document.getElementById('fiatOk');
-        ok.style.display = 'block';
-        ok.classList.add('on');
-        console.log("Transaction successful: ", transaction);
-      },
-      onCancel: function() {
-        // Handle user closing the modal
-        btn.disabled = false;
-        btn.innerHTML = ' Pay with Apple Pay';
-        console.log("Payment modal closed");
-      },
-      onError: function(error) {
-        // Handle error
-        btn.disabled = false;
-        btn.innerHTML = ' Pay with Apple Pay';
-        alert('Payment failed. Please try again.');
-        console.log("Payment error: ", error);
-      }
-    });
-  } catch (error) {
-    btn.disabled = false;
-    btn.innerHTML = ' Pay with Apple Pay';
-    console.error("Checkout error: ", error);
-    alert('Unable to initialize payment. Please try again.');
-  }
-}
-
-function resetFiat() {
-  document.getElementById('fiatForm').style.display = '';
-  const ok = document.getElementById('fiatOk');
-  ok.style.display = 'none'; ok.classList.remove('on');
-  document.getElementById('dName').value = '';
-  document.getElementById('dEmail').value = '';
-  document.getElementById('custom').value = '';
-  amt = 20; updateCurrency();
-}
-</script>
 </body>
 </html>
